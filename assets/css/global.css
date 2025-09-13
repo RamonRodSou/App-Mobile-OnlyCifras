@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    --primary-bg-color: #000000;
+    --primary-color: #ffffff;
+}
+
+.card {
+    background-color: var(--primary-bg-color);
+    padding: .5rem;
+}
+
+.title {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.subtitle {
+    color: rgb(114, 233, 2);
+}

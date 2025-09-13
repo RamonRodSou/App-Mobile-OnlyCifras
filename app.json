@@ -23,7 +23,8 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
@@ -43,6 +44,16 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "firebaseApiKey": "AIzaSyCfqJy9CeRG0u-4TKx6QGDFomYcyjmfQpA",
+      "firebaseAuthDomain": "cifra-3739d.firebaseapp.com",
+      "firebaseDatabaseUrl": "https://form-965f6-default-rtdb.firebaseio.com",
+      "firebaseProjectId": "cifra-3739d",
+      "firebaseStorageBucket": "cifra-3739d.appspot.com",
+      "firebaseMessagingSenderId": "588504489368",
+      "firebaseAppId": "1:588504489368:web:88d4c5760335dc788bdfed",
+      "firebaseMeasurementId": "G-VW4NHMQB78"
     }
   }
 }
