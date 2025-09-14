@@ -5,6 +5,14 @@
 body {
     --primary-bg-color: #000000;
     --primary-color: #ffffff;
+
+    --name-color: #ffff00;
+    --notes-color: #20f535;
+    --tone-color: #ebb811;
+}
+
+.container {
+    padding: 1rem;
 }
 
 .card {
@@ -14,9 +22,9 @@ body {
 
 .title {
     color: var(--primary-color);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 .subtitle {
-    color: rgb(114, 233, 2);
+    color: var(--name-color);
 }

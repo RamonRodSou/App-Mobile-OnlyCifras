@@ -1,12 +1,17 @@
-import { StructChords } from "@/libs/domain/StructChords/StructChords"
+import { StructSong } from "@/libs/domain/StructSong/StructSong"
 import { create } from 'zustand'
 
 type dataStore = {
-    structChords: StructChords[],
-    setStructChords: (data: StructChords[]) => void
+    structSong: StructSong[],
+    setStructSong: (data: StructSong[]) => void,
+
+    chord: StructSong | null,
+    setChord: (data: StructSong | null) => void,
 }
 
 export const useDataStore = create<dataStore>((set) => ({
-    structChords: [],
-    setStructChords: (data) => set({ structChords: data }),
+    structSong: [],
+    setStructSong: (data) => set({ structSong: data }),
+    chord: null,
+    setChord: (data) => set({ chord: data })
 }))

@@ -1,10 +1,10 @@
 import { ScrollView } from 'react-native';
-import Chords from '../_component/chords/chords';
+import SongsList from '../_component/song/songsList';
 
 export default function HomeScreen() {
   return (
     <ScrollView>
-      <Chords />
+      <SongsList />
     </ScrollView>
   );
 }

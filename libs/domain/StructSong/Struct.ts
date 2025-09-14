@@ -5,8 +5,8 @@ export class Struct {
 
     constructor(
         public readonly id: string = uuidv4(),
-        public content: string = StringUtils.EMPTY,
         public section: string = StringUtils.EMPTY,
+        public content: string[] = [],
     ) { }
 
     static fromJson(json: any): Struct {
