@@ -35,7 +35,6 @@ export class StructSong {
             id: this.id,
             title: this.title,
             description: this.description,
-            phone: this.description,
             singer: this.singer,
             tom: this.tom,
             userId: this.userId,

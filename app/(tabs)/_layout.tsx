@@ -2,27 +2,46 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const size = 28;
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#20f535',
+        tabBarInactiveTintColor: '#999999',
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
+        name="newChord"
+        options={{
+          title: 'Cadastro',
+          tabBarIcon: ({ color }) => <Ionicons size={size} name="add-circle-outline" color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Biblioteca',
+          tabBarIcon: ({ color }) => <Ionicons size={size} name="musical-notes" color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="playList"
+        options={{
+          title: 'Playlist',
+          tabBarIcon: ({ color }) => <Ionicons size={size} name="list" color={color} />,
         }}
       />
     </Tabs>
+
+
   );
 }

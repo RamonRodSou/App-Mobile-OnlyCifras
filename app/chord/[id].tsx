@@ -1,5 +1,5 @@
+import ChordData from "@/components/chord/chord";
 import { useLocalSearchParams } from "expo-router";
-import ChordData from "./chordData";
 
 export default function Chord() {
 

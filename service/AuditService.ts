@@ -1,4 +1,4 @@
-import { Audit } from "@/libs/domain/Audit/audit";
+import { Audit } from "@/libs/domain/Audit/Audit";
 import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { auth, db } from "./firebase";
 

@@ -1,6 +1,5 @@
-import { auth, db } from "@service/firebase";
+import { db } from "@/service/firebase";
 import { addDoc, collection, doc, DocumentData, getDoc, getDocs, updateDoc, WithFieldValue } from "firebase/firestore";
-
 
 export class Crud {
     static async findById<T>(id: string, collectionName: string): Promise<(T & { id: string }) | null> {
@@ -54,9 +53,9 @@ export class Crud {
     }
 
     static getAuthenticatedUser() {
-        const user = auth.currentUser;
-        if (!user) throw new Error("Usuário não autenticado.");
-        return user;
+        // const user = auth.currentUser;
+        // if (!user) throw new Error("Usuário não autenticado.");
+        // return user;
     }
 
 }

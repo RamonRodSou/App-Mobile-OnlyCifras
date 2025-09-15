@@ -7,11 +7,17 @@ type dataStore = {
 
     chord: StructSong | null,
     setChord: (data: StructSong | null) => void,
+
+    isFavorite: boolean,
+    setIsFavorite: (data: boolean) => void,
 }
 
 export const useDataStore = create<dataStore>((set) => ({
     structSong: [],
     setStructSong: (data) => set({ structSong: data }),
     chord: null,
-    setChord: (data) => set({ chord: data })
+    setChord: (data) => set({ chord: data }),
+
+    isFavorite: false,
+    setIsFavorite: (data) => set({ isFavorite: data }),
 }))
