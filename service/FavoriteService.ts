@@ -10,7 +10,7 @@ export async function createFavorite(it: Favorite) {
         // if (!user) throw new Error("Usuário não autenticado.");
         await addDoc(collection(db, 'favorites'), {
             // userId: user.uid,
-            idChord: it.idChord,
+            songId: it.songId,
             isActive: it.isActive,
             createdAt: it.createdAt,
         });

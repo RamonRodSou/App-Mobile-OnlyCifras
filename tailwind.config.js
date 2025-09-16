@@ -9,12 +9,14 @@ module.exports = {
     extend: {
       colors: {
         primary: "#000000",
+        secondary: "#ffffff",
         title: "#ffffff",
         name: "#ffff00",
         notes: "#20f535",
         tone: "#ebb811",
+        struct: "#6d6d0693",
       },
     },
   },
   plugins: [],
-}
+} 

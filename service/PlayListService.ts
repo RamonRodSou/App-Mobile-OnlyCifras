@@ -1,6 +1,6 @@
 import { PlayList } from "@/libs/domain/PlayList/PlayList";
 import firebase from "firebase/compat/app";
-import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 
@@ -11,6 +11,7 @@ export async function createPlayList(it: PlayList) {
         await addDoc(collection(db, 'playLists'), {
             // userId: user.uid,
             name: it.name,
+            songId: it.songId,
             isActive: it.isActive,
             createdAt: it.createdAt,
         });
@@ -31,6 +32,21 @@ export async function findAllPlayList(): Promise<PlayList[]> {
         throw error;
     }
 }
+
+export async function findByPlayListId(id: string): Promise<PlayList | null> {
+    try {
+        const ref = doc(db, 'playLists', id);
+        const snapshot = await getDoc(ref);
+
+        if (!snapshot.exists()) return null;
+
+        return { id: snapshot.id, ...snapshot.data() } as PlayList;
+    } catch (error) {
+        alert('Erro ao buscar playlsit: ' + error);
+        throw error;
+    }
+}
+
 
 export async function deletePlayList(id: string) {
     try {

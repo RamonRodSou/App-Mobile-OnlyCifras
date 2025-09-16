@@ -1,6 +1,7 @@
+import { Tones } from "@/libs/enuns/Tones";
 import { StringUtils } from "@/libs/utils/StringUtils";
 import { v4 as uuidv4 } from 'uuid';
-import { Struct } from "./Struct";
+import { IStruct } from "../Interfaces/IStruct";
 
 export class StructSong {
 
@@ -9,9 +10,9 @@ export class StructSong {
         public title: string = StringUtils.EMPTY,
         public description: string = StringUtils.EMPTY,
         public singer: string = StringUtils.EMPTY,
-        public tom: string = StringUtils.EMPTY,
+        public tone: Tones = Tones.C_Am,
         public userId: string = StringUtils.EMPTY,
-        public Struct: Struct[] = [],
+        public struct: IStruct[] = [],
         public isActive: boolean = true,
         public createdAt: string = new Date().toISOString(),
     ) { }
@@ -22,9 +23,9 @@ export class StructSong {
             json.title,
             json.description,
             json.singer,
-            json.tom,
+            json.tone,
             json.userId,
-            json.Struct,
+            json.struct,
             json.isActive,
             json.createdAt
         );
@@ -36,9 +37,9 @@ export class StructSong {
             title: this.title,
             description: this.description,
             singer: this.singer,
-            tom: this.tom,
+            tone: this.tone,
             userId: this.userId,
-            Struct: this.Struct,
+            struct: this.struct,
             isActive: this.isActive,
             createdAt: this.createdAt,
         };

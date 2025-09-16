@@ -1,6 +1,6 @@
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
 import firebase from "firebase/compat/app";
-import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, documentId, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 export async function createSongs(entity: StructSong) {
@@ -12,7 +12,8 @@ export async function createSongs(entity: StructSong) {
             title: entity.title,
             description: entity.description,
             singer: entity.singer,
-            tone: entity.tom,
+            tone: entity.tone,
+            struct: entity.struct,
             userId: entity.userId,
             isActive: entity.isActive,
             createdAt: entity.createdAt,
@@ -35,6 +36,37 @@ export async function findAllSongs(): Promise<StructSong[]> {
         throw error;
     }
 }
+
+
+export async function findAllSongsByIds(ids: string[]): Promise<StructSong[]> {
+    try {
+        if (!ids || ids.length === 0) return [];
+
+        const chunks = [];
+        for (let i = 0; i < ids.length; i += 10) {
+            chunks.push(ids.slice(i, i + 10));
+        }
+
+        const results: StructSong[] = [];
+
+        for (const chunk of chunks) {
+            const q = query(
+                collection(db, "cifras"),
+                where(documentId(), "in", chunk)
+            );
+            const snapshot = await getDocs(q);
+            snapshot.forEach((doc) => {
+                results.push({ id: doc.id, ...doc.data() } as StructSong);
+            });
+        }
+
+        return results;
+    } catch (error) {
+        alert("Erro ao listar cifras: " + error);
+        throw error;
+    }
+}
+
 
 export async function findBySongsId(id: string): Promise<StructSong | null> {
     try {

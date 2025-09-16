@@ -34,14 +34,12 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="playList"
+        name="playListTeam"
         options={{
           title: 'Playlist',
           tabBarIcon: ({ color }) => <Ionicons size={size} name="list" color={color} />,
         }}
       />
     </Tabs>
-
-
   );
 }

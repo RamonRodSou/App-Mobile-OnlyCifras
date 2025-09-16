@@ -5,9 +5,5 @@ export default function Chord() {
 
     const { id } = useLocalSearchParams<{ id: string }>();
 
-    return (
-        <>
-            <ChordData id={id} />
-        </>
-    )
+    return <ChordData id={id} />
 } 
