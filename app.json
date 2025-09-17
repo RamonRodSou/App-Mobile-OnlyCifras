@@ -46,6 +46,12 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "owner": "ramonrodsouza"
+    "owner": "ramonrodsouza",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8e2db9b6-3156-4ed9-9b18-dec36e728deb"
+      }
+    }
   }
 }

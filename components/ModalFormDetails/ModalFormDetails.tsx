@@ -23,7 +23,7 @@ export default function ModalFormDetails({
     const [visible, setVisible] = useState(false);
 
     return (
-        <View>
+        <View className="mb-5">
             <View className="flex-row justify-end mt-2">
                 <TouchableOpacity
                     onPress={() => setVisible(true)}

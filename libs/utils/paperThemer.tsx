@@ -8,7 +8,7 @@ export const theme = {
         accent: '#20f535',
         background: '#ecececff',
         surface: '#ffffff',
-        text: '#ffffff',
+        text: '#333333',
         placeholder: '#ffff00',
         notification: '#ebb811'
     },

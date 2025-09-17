@@ -9,6 +9,7 @@ import { StringUtils } from '@/libs/utils/StringUtils';
 import { DarkTheme, DefaultTheme, getFocusedRouteNameFromRoute, ParamListBase, RouteProp, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
 
 export default function RootLayout() {
@@ -36,15 +37,18 @@ export default function RootLayout() {
 
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme} >
-            <PaperProvider theme={theme}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={getDynamicTabOptions} />
-                    <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-                    <Stack.Screen name="chord/[id]" options={{ title: 'Cifra' }} />
-                    <Stack.Screen name="favoriteList/[id]" options={{ title: 'Play' }} />
-                </Stack>
-                <StatusBar style="auto" />
-            </PaperProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <PaperProvider theme={theme}>
+                    <Stack>
+                        <Stack.Screen name="(tabs)" options={getDynamicTabOptions} />
+                        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+                        <Stack.Screen name="chord/[id]" options={{ title: 'Cifra' }} />
+                        <Stack.Screen name="favoriteList/[id]" options={{ title: 'Play' }} />
+                        <Stack.Screen name="chordFavorites/[id]" options={{ title: 'Cifra' }} />
+                    </Stack>
+                    <StatusBar style="auto" />
+                </PaperProvider>
+            </GestureHandlerRootView>
 
         </ThemeProvider>
     );

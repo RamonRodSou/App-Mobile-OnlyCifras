@@ -11,9 +11,10 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="index"
       screenOptions={{
         tabBarActiveTintColor: '#20f535',
-        tabBarInactiveTintColor: '#999999',
+        tabBarInactiveTintColor: '#dcd7d7ff',
         headerShown: false,
         tabBarButton: HapticTab,
       }}>

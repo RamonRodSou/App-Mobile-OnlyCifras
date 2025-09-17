@@ -15,6 +15,7 @@ type dataStore = {
 export const useDataStore = create<dataStore>((set) => ({
     structSong: [],
     setStructSong: (data) => set({ structSong: data }),
+
     chord: null,
     setChord: (data) => set({ chord: data }),
 

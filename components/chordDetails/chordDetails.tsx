@@ -1,19 +1,22 @@
+import { IErrors } from "@/libs/domain/Interfaces/IError";
 import { IStruct } from "@/libs/domain/Interfaces/IStruct";
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
 import { Tones } from "@/libs/enuns/Tones";
 import { StringUtils } from "@/libs/utils/StringUtils";
+import { sanitize, validateSongForm } from "@/libs/utils/validate";
 import { createSongs } from "@/service/SongsService";
 import { Ionicons } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
-import SelectModal from "../selectModal/SelectModal";
+import SelectModal from "../selectModal/selectModal";
 
 export default function ChordDetails() {
     const [form, setForm] = useState<StructSong>(new StructSong());
     const [struct, setStruct] = useState<IStruct[]>([{ section: '', content: [''] }]);
-    const route = useRoute();
+    const [errors, setErrors] = useState<IErrors>({});
+    const route = useRouter();
 
     const size = 30;
 
@@ -21,7 +24,6 @@ export default function ChordDetails() {
         label: tone,
         value: tone,
     }));
-
 
     function handleChange(field: keyof StructSong, value: string) {
         setForm(prev => {
@@ -43,16 +45,39 @@ export default function ChordDetails() {
         form.struct = struct;
     }
 
-    async function addStruct() {
-        setStruct([...struct, { section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }])
+    function formatForm(form: StructSong): StructSong {
+        return StructSong.fromJson({
+            ...form,
+            title: sanitize(String(form.title ?? StringUtils.EMPTY)),
+            singer: sanitize(String(form.singer ?? StringUtils.EMPTY)),
+            tone: sanitize(String(form.tone ?? StringUtils.EMPTY)),
+            struct: form.struct?.map((s) => ({
+                section: sanitize(String(s.section ?? StringUtils.EMPTY)),
+                content: s.content?.map((c) => sanitize(String(c))) ?? [StringUtils.EMPTY],
+            })) ?? [],
+        });
     }
 
     function removeSection(index: number) {
         setStruct(struct.filter((_, i) => i !== index))
     }
 
+    async function addStruct() {
+        setStruct([...struct, { section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }])
+    }
+
     async function handleSubmit() {
+
+        const formattedForm = formatForm(form);
+        const errors = validateSongForm(formattedForm);
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
+
         await createSongs(form);
+
         setForm(new StructSong());
         setStruct([{ section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }]);
     }
@@ -69,6 +94,7 @@ export default function ChordDetails() {
                 contentStyle={{ fontSize: 22 }}
                 value={form?.title}
                 onChangeText={(it) => handleChange('title', it)}
+                error={!!errors.title}
             />
 
             <SelectModal
@@ -85,6 +111,7 @@ export default function ChordDetails() {
                 contentStyle={{ fontSize: 22 }}
                 value={form?.singer}
                 onChangeText={(it) => handleChange('singer', it)}
+                error={!!errors.singer}
             />
 
             {struct.map((it, index) => (
@@ -105,6 +132,7 @@ export default function ChordDetails() {
                         contentStyle={{ fontSize: 22 }}
                         value={it?.section}
                         onChangeText={(text) => handleStructChange(index, 'section', text)}
+                        error={!!errors[`struct_section_${index}`]}
                     />
                     <TextInput
                         placeholder="Cifra"
@@ -116,6 +144,7 @@ export default function ChordDetails() {
                         contentStyle={{ fontSize: 22 }}
                         value={it?.content.join(' ').replaceAll(' P ', '\n')}
                         onChangeText={(it) => handleStructChange(index, 'content', it)}
+                        error={!!errors[`struct_content_${index}`]}
                     />
 
                 </View>

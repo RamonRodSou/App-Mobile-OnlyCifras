@@ -1,16 +1,17 @@
 import { useDataStore } from '@/hooks/useData';
 import { PlayList } from '@/libs/domain/PlayList/PlayList';
 import { StructSong } from '@/libs/domain/StructSong/StructSong';
+import { activeFilter, filterAndPaginate } from '@/libs/utils/filterEntities';
 import { StringUtils } from '@/libs/utils/StringUtils';
-import { findAllFavorite } from '@/service/FavoriteService';
 import { findAllPlayList, updatePlayList } from '@/service/PlayListService';
 import { findAllSongs } from '@/service/SongsService';
 import { Link } from 'expo-router';
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, TextInput } from 'react-native-paper';
 import Loading from '../loading/loadgin';
-import PlaylistModalRadius from '../PlaylistModalRadius/PlaylistModalRadius';
+import PaginedButton from '../paginedButton/paginedButton';
+import PlaylistModalRadius from '../playlistModalRadius/playlistModalRadius';
 
 export default function SongsList() {
     const store = useDataStore();
@@ -18,9 +19,11 @@ export default function SongsList() {
     const [loading, setLoading] = useState<boolean>(true);
     const [playList, setPlayList] = useState<PlayList[]>([]);
     const [selectedSong, setSelectedSong] = useState<string>(StringUtils.EMPTY);
+    const [searchTerm, setSearchTerm] = useState<string>(StringUtils.EMPTY);
+    const [page, setPage] = useState<number>(0);
 
     const playlistsWithSong = selectedSong
-        ? playList.filter(pl => pl.songId?.includes(selectedSong))
+        ? playList.filter(it => it.songId?.includes(selectedSong))
         : [];
 
     const processedSongs = useMemo(() => {
@@ -34,16 +37,21 @@ export default function SongsList() {
         });
     }, [store.structSong]);
 
-    async function openModalPlayList(data: StructSong) {
-        setSelectedSong(data.id);
-        loadPlaylist();
-        setModalVisible(true);
-    }
+    const displayedSongs = useMemo(() => {
+        if (!searchTerm) return processedSongs;
+        return processedSongs.filter(song =>
+            song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            song.singer.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [processedSongs, searchTerm]);
 
-    async function handleAddPlayList(selectedPlaylists: string[], songId: string) {
-        for (const playlist of playList) {
-            const updatedSongs = playlist.songId ? [...playlist.songId] : [];
-            const isSelected = selectedPlaylists.includes(playlist.id);
+    const activeEntities = activeFilter(displayedSongs);
+    const entities = filterAndPaginate({ entity: activeEntities, page });
+
+    const handleAddPlayList = useCallback(async (selectedPlaylists: string[], songId: string) => {
+        for (const list of playList) {
+            const updatedSongs = list.songId ? [...list.songId] : [];
+            const isSelected = selectedPlaylists.includes(list.id);
 
             if (isSelected && !updatedSongs.includes(songId)) {
                 updatedSongs.push(songId);
@@ -52,12 +60,19 @@ export default function SongsList() {
                 updatedSongs.splice(index, 1);
             }
 
-            await updatePlayList(playlist.id, { songId: updatedSongs });
+            await updatePlayList(list.id, { songId: updatedSongs });
         }
 
         setSelectedSong(StringUtils.EMPTY);
         setModalVisible(false);
-    }
+    }, [playList]);
+
+    const openModalPlayList = useCallback(async (data: StructSong) => {
+        setSelectedSong(data.id);
+        const list = await findAllPlayList();
+        setPlayList(list);
+        setModalVisible(true);
+    }, [])
 
     async function loadData() {
         setLoading(true);
@@ -66,18 +81,9 @@ export default function SongsList() {
         setLoading(false);
     }
 
-    async function loadFavorite() {
-        const data = await findAllFavorite();
-    }
-
-    async function loadPlaylist() {
-        const data = await findAllPlayList();
-        setPlayList(data);
-    }
-
     useEffect(() => {
         loadData();
-        loadFavorite();
+        setPage(0);
     }, []);
 
     if (loading) {
@@ -85,8 +91,18 @@ export default function SongsList() {
     }
 
     return (
-        <>
-            {processedSongs?.map((it, index) => (
+        <View>
+            <View>
+                <TextInput
+                    placeholder="Buscar cifra"
+                    mode="outlined"
+                    className="mb-2"
+                    contentStyle={{ fontSize: 22 }}
+                    value={searchTerm}
+                    onChangeText={setSearchTerm}
+                />
+            </View>
+            {entities?.map((it, index) => (
                 <TouchableOpacity key={index} className='p-2 mb-2 rounded-md flex-row justify-between items-center'>
                     <Link href={`/chord/${it.id}`}>
                         <View>
@@ -97,7 +113,7 @@ export default function SongsList() {
 
                     <TouchableOpacity>
                         <IconButton
-                            icon="cards-heart-outline"
+                            icon="plus-circle"
                             size={28}
                             iconColor="#ffffff96"
                             onPress={() => openModalPlayList(it)}
@@ -114,8 +130,13 @@ export default function SongsList() {
                     onSubmit={(selectedPlaylists) => handleAddPlayList(selectedPlaylists, selectedSong)}
                 />
             )}
-
-        </>
-
+            {activeEntities.length > StringUtils.ROWS_PER_PAGE && (
+                <PaginedButton
+                    page={page}
+                    setPage={setPage}
+                    activeEntity={activeEntities}
+                />
+            )}
+        </View>
     )
 }

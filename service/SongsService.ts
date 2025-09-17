@@ -3,11 +3,13 @@ import firebase from "firebase/compat/app";
 import { addDoc, collection, doc, documentId, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
+const collectionbd = 'cifras'
+
 export async function createSongs(entity: StructSong) {
     try {
         const user = auth.currentUser;
         // if (!user) throw new Error("Usuário não autenticado.");
-        await addDoc(collection(db, 'cifras'), {
+        await addDoc(collection(db, collectionbd), {
             // id: user.uid,
             title: entity.title,
             description: entity.description,
@@ -29,7 +31,7 @@ export async function findAllSongs(): Promise<StructSong[]> {
         const user = auth.currentUser;
         // if (!user) throw new Error("Usuário não autenticado.");
 
-        const snapshot = await getDocs(collection(db, 'cifras'));
+        const snapshot = await getDocs(collection(db, collectionbd));
         return snapshot.docs.map((it) => ({ id: it.id, ...it.data() } as StructSong))
     } catch (error) {
         alert('Erro ao listar cifras: ' + error);
@@ -51,7 +53,7 @@ export async function findAllSongsByIds(ids: string[]): Promise<StructSong[]> {
 
         for (const chunk of chunks) {
             const q = query(
-                collection(db, "cifras"),
+                collection(db, collectionbd),
                 where(documentId(), "in", chunk)
             );
             const snapshot = await getDocs(q);
@@ -70,7 +72,7 @@ export async function findAllSongsByIds(ids: string[]): Promise<StructSong[]> {
 
 export async function findBySongsId(id: string): Promise<StructSong | null> {
     try {
-        const ref = doc(db, 'cifras', id);
+        const ref = doc(db, collectionbd, id);
         const snapshot = await getDoc(ref);
 
         if (!snapshot.exists()) return null;
@@ -84,7 +86,7 @@ export async function findBySongsId(id: string): Promise<StructSong | null> {
 
 export async function updateSongs(id: string, data: Partial<StructSong>): Promise<void> {
     try {
-        const ref = doc(db, 'cifras', id);
+        const ref = doc(db, collectionbd, id);
         await updateDoc(ref, data);
     } catch (error) {
         alert('Erro ao atualizar cifras: ' + error);
@@ -94,7 +96,7 @@ export async function updateSongs(id: string, data: Partial<StructSong>): Promis
 
 export async function deleteSongs(id: string) {
     try {
-        await firebase.firestore().collection('cifras').doc(id).delete()
+        await firebase.firestore().collection(collectionbd).doc(id).delete()
     } catch (error) {
         alert('Erro ao deletar cifras: ' + error)
     }
