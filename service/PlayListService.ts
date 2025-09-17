@@ -1,6 +1,5 @@
 import { PlayList } from "@/libs/domain/PlayList/PlayList";
-import firebase from "firebase/compat/app";
-import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, arrayRemove, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 
@@ -47,12 +46,41 @@ export async function findByPlayListId(id: string): Promise<PlayList | null> {
     }
 }
 
-
-export async function deletePlayList(id: string) {
+export async function deletePlayList(id: string): Promise<void> {
     try {
-        await firebase.firestore().collection('playLists').doc(id).delete()
+        const ref = doc(db, 'playLists', id);
+        await deleteDoc(ref);
     } catch (error) {
-        alert('Erro ao deletar playlist: ' + error)
+        alert('Erro ao atualizar cifras: ' + error);
+        throw error;
+    }
+}
+
+export async function deleteSongFromPlayList(playlistId: string, songId: string) {
+    try {
+        const ref = doc(db, "playLists", playlistId);
+        await updateDoc(ref, {
+            songId: arrayRemove(songId),
+        });
+        console.log(`Música ${songId} removida da playlist ${playlistId}`);
+
+    } catch (error) {
+        alert("Erro ao remover música da playlist: " + error);
+        throw error;
+    }
+}
+
+
+export async function deleteSongsFromPlayList(playlistId: string, songIds: string[]) {
+    try {
+        const ref = doc(db, "playLists", playlistId);
+        await updateDoc(ref, {
+            songId: arrayRemove(...songIds),
+        });
+        console.log(`Músicas ${songIds.join(", ")} removidas da playlist ${playlistId}`);
+    } catch (error) {
+        alert("Erro ao remover músicas da playlist: " + error);
+        throw error;
     }
 }
 

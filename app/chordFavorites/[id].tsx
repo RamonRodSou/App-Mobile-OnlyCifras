@@ -1,6 +1,7 @@
 import ChordData from "@/components/chord/chord";
 import Loading from "@/components/loading/loadgin";
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
+import { deleteSongFromPlayList } from "@/service/PlayListService";
 import { findAllSongsByIds } from "@/service/SongsService";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
@@ -10,12 +11,17 @@ const { width, height } = Dimensions.get("window");
 
 export default function ChordFavorites() {
 
-    const { songs, id } = useLocalSearchParams<{ songs?: string; id?: string }>();
+    const { songs, playlistId, id } = useLocalSearchParams<{ songs?: string; playlistId?: string; id?: string }>();
     const songIds: string[] = songs ? JSON.parse(songs) : [];
     const [chords, setChords] = useState<StructSong[]>([]);
     const [initialIndex, setInitialIndex] = useState(0);
 
     const flatListRef = useRef<FlatList>(null);
+
+    async function removeSong(songId: string) {
+        deleteSongFromPlayList(String(playlistId), songId);
+        setChords((prev) => prev.filter((song) => song.id !== songId));
+    }
 
     useEffect(() => {
         async function loadAllChords() {
@@ -32,8 +38,9 @@ export default function ChordFavorites() {
                 }, 50);
             }
         }
+
         loadAllChords();
-    }, [songIds, id]);
+    }, [songIds, playlistId, id]);
 
     if (!chords.length) return <Loading visible={true} />
 

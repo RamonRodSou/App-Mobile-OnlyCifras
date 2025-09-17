@@ -20,7 +20,6 @@ export default function PlayListTeam() {
         });
     };
 
-
     function formatForm(form: PlayList): PlayList {
         return PlayList.fromJson({
             ...form,
