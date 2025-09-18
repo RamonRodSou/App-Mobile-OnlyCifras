@@ -1,22 +1,34 @@
+import { useDataStore } from "@/hooks/useData";
 import { IErrors } from "@/libs/domain/Interfaces/IError";
 import { IStruct } from "@/libs/domain/Interfaces/IStruct";
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
 import { Tones } from "@/libs/enuns/Tones";
 import { StringUtils } from "@/libs/utils/StringUtils";
 import { sanitize, validateSongForm } from "@/libs/utils/validate";
-import { createSongs } from "@/service/SongsService";
+import { createSongs, deleteSongs, findBySongsId, updateSongs } from "@/service/SongsService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
+import ConfirmationModal from "../confirmationModal/confirmationModal";
+import CustomButton from "../customButton/customButton";
 import SelectModal from "../selectModal/selectModal";
 
-export default function ChordDetails() {
+type Props = {
+    id?: string | null
+}
+
+export default function ChordDetails({ id }: Props) {
+
     const [form, setForm] = useState<StructSong>(new StructSong());
-    const [struct, setStruct] = useState<IStruct[]>([{ section: '', content: [''] }]);
+    const [struct, setStruct] = useState<IStruct[]>([{ section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }]);
     const [errors, setErrors] = useState<IErrors>({});
-    const route = useRouter();
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const router = useRouter();
+    const store = useDataStore();
+
+    const title = id ? 'Editar Cifra' : 'Nova Cifra';
 
     const size = 30;
 
@@ -42,7 +54,7 @@ export default function ChordDetails() {
             newStruct[index][key] = value
         }
         setStruct(newStruct)
-        form.struct = struct;
+        setForm(prev => StructSong.fromJson({ ...prev, struct: newStruct }));
     }
 
     function formatForm(form: StructSong): StructSong {
@@ -62,6 +74,24 @@ export default function ChordDetails() {
         setStruct(struct.filter((_, i) => i !== index))
     }
 
+    async function saveEntity(data: StructSong) {
+        let savedSong: StructSong;
+
+        if (id) {
+            await updateSongs(id, data.toJSON());
+            savedSong = data;
+            store.setStructSong(
+                store.structSong.map(s => s.id === id ? savedSong : s)
+            );
+        } else {
+            const newId = await createSongs(data.toJSON());
+            savedSong = StructSong.fromJson({ ...data, id: newId });
+            store.setStructSong([...store.structSong, savedSong]);
+            setForm(new StructSong());
+            setStruct([{ section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }]);
+        }
+    }
+
     async function addStruct() {
         setStruct([...struct, { section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }])
     }
@@ -76,17 +106,48 @@ export default function ChordDetails() {
             return;
         }
 
-        await createSongs(form);
+        await saveEntity(formattedForm);
 
-        setForm(new StructSong());
-        setStruct([{ section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }]);
+        router.push('/(tabs)');
     }
+
+    async function loadSong() {
+        if (!id) return;
+        const song = await findBySongsId(id);
+
+        if (!song) return;
+        return song
+    }
+
+    async function handleDelete() {
+        await deleteSongs(String(id));
+        setModalVisible(false);
+
+        store.setStructSong(store.structSong.filter(s => s.id !== id));
+
+        router.push('/(tabs)');
+    }
+
+    useEffect(() => {
+        if (id) {
+            loadSong().then(song => {
+                if (song) {
+                    setForm(StructSong.fromJson(song));
+                    setStruct(song.struct?.length ? song.struct : [{ section: StringUtils.EMPTY, content: [StringUtils.EMPTY] }]);
+                }
+            });
+        }
+    }, [id]);
 
     return (
         <View className="p-4 gap-2 bg-primary">
-            <Text className="text-[2rem] text-title mb-3">
-                Cadastrar Nova Cifra
-            </Text>
+            <View className="flex-row justify-between items-center">
+                <Text className="text-[2rem] text-title mb-3">
+                    {title}
+                </Text>
+                {id && (<CustomButton handle={() => setModalVisible(true)} />)}
+            </View>
+
             <TextInput
                 placeholder="Título"
                 mode="outlined"
@@ -148,7 +209,15 @@ export default function ChordDetails() {
                     />
 
                 </View>
+
             ))}
+            <ConfirmationModal
+                visible={modalVisible}
+                title="Confirmação"
+                message="Tem certeza que deseja deletar esta música?"
+                onCancel={() => setModalVisible(false)}
+                onConfirm={handleDelete}
+            />
             <View className="flex-row justify-start mt-2">
                 <TouchableOpacity
                     onPress={addStruct}

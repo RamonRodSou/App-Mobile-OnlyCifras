@@ -1,4 +1,4 @@
-import ModalFormDetails from '@/components/modalFormDetails/ModalFormDetails';
+import FormDetailsModal from '@/components/formDetailsModal/formDetailsModal';
 import { IErrors } from '@/libs/domain/Interfaces/IError';
 import { PlayList } from '@/libs/domain/PlayList/PlayList';
 import { StringUtils } from '@/libs/utils/StringUtils';
@@ -54,7 +54,7 @@ export default function PlayListTeam() {
 
     return (
         <ScrollView className="flex-1 bg-background p-6">
-            <ModalFormDetails
+            <FormDetailsModal
                 title="Nova Playlist"
                 labelBtn="NOVA"
                 submit={(close) => {
@@ -68,7 +68,7 @@ export default function PlayListTeam() {
                     onChangeText={(it) => handleChange('name', it)}
                 />
 
-            </ModalFormDetails>
+            </FormDetailsModal>
 
             <View className="flex-col gap-4">
                 {data.map((it, index) => (

@@ -1,11 +1,10 @@
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
-import firebase from "firebase/compat/app";
-import { addDoc, collection, doc, documentId, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, documentId, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 const collectionbd = 'cifras'
 
-export async function createSongs(entity: StructSong) {
+export async function createSongs(entity: Partial<StructSong>) {
     try {
         const user = auth.currentUser;
         // if (!user) throw new Error("Usuário não autenticado.");
@@ -39,7 +38,6 @@ export async function findAllSongs(): Promise<StructSong[]> {
     }
 }
 
-
 export async function findAllSongsByIds(ids: string[]): Promise<StructSong[]> {
     try {
         if (!ids || ids.length === 0) return [];
@@ -69,7 +67,6 @@ export async function findAllSongsByIds(ids: string[]): Promise<StructSong[]> {
     }
 }
 
-
 export async function findBySongsId(id: string): Promise<StructSong | null> {
     try {
         const ref = doc(db, collectionbd, id);
@@ -94,10 +91,12 @@ export async function updateSongs(id: string, data: Partial<StructSong>): Promis
     }
 }
 
-export async function deleteSongs(id: string) {
+export async function deleteSongs(id: string): Promise<void> {
     try {
-        await firebase.firestore().collection(collectionbd).doc(id).delete()
+        const ref = doc(db, collectionbd, id);
+        await deleteDoc(ref);
     } catch (error) {
-        alert('Erro ao deletar cifras: ' + error)
+        alert('Erro ao atualizar cifras: ' + error);
+        throw error;
     }
-} 
+}

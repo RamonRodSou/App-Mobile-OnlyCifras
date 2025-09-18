@@ -10,9 +10,9 @@ import { Dimensions, FlatList, View } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export default function ChordFavorites() {
-
     const { songs, playlistId, id } = useLocalSearchParams<{ songs?: string; playlistId?: string; id?: string }>();
     const songIds: string[] = songs ? JSON.parse(songs) : [];
+
     const [chords, setChords] = useState<StructSong[]>([]);
     const [initialIndex, setInitialIndex] = useState(0);
 

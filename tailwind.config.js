@@ -15,6 +15,7 @@ module.exports = {
         notes: "#20f535",
         tone: "#ebb811",
         struct: "#6d6d0693",
+        default: "#dad6d696",
       },
     },
   },

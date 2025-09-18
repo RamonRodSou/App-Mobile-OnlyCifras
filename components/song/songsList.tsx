@@ -1,6 +1,7 @@
 import { useDataStore } from '@/hooks/useData';
 import { PlayList } from '@/libs/domain/PlayList/PlayList';
 import { StructSong } from '@/libs/domain/StructSong/StructSong';
+import { ColorUtils } from '@/libs/utils/ColorUtils';
 import { activeFilter, filterAndPaginate } from '@/libs/utils/filterEntities';
 import { StringUtils } from '@/libs/utils/StringUtils';
 import { findAllPlayList, updatePlayList } from '@/service/PlayListService';
@@ -8,10 +9,11 @@ import { findAllSongs } from '@/service/SongsService';
 import { Link } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
-import { IconButton, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
+import CustomButton from '../customButton/customButton';
 import Loading from '../loading/loadgin';
 import PaginedButton from '../paginedButton/paginedButton';
-import PlaylistModalRadius from '../playlistModalRadius/playlistModalRadius';
+import PlaylistRadiusModal from '../playlistRadiusModal/playlistRadiusModal';
 
 export default function SongsList() {
     const store = useDataStore();
@@ -111,18 +113,12 @@ export default function SongsList() {
                         </View>
                     </Link>
 
-                    <TouchableOpacity>
-                        <IconButton
-                            icon="plus-circle"
-                            size={28}
-                            iconColor="#ffffff96"
-                            onPress={() => openModalPlayList(it)}
-                        />
-                    </TouchableOpacity>
+                    <CustomButton handle={() => openModalPlayList(it)} color={ColorUtils.DEFAULT} icon="plus-circle" />
+
                 </TouchableOpacity >
             ))}
             {modalVisible && selectedSong && (
-                <PlaylistModalRadius
+                <PlaylistRadiusModal
                     visible={modalVisible}
                     onClose={() => setModalVisible(false)}
                     playList={playList}

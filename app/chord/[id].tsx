@@ -5,7 +5,6 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 
 export default function Chord() {
-
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const store = useDataStore();

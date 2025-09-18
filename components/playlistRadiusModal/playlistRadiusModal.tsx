@@ -10,7 +10,7 @@ type PlaylistModalProps = {
     preSelected?: string[];
 };
 
-export default function PlaylistModalRadius({ visible, onClose, playList, onSubmit, preSelected = [] }: PlaylistModalProps) {
+export default function PlaylistRadiusModal({ visible, onClose, playList, onSubmit, preSelected = [] }: PlaylistModalProps) {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const toggleSelection = (id: string) => {

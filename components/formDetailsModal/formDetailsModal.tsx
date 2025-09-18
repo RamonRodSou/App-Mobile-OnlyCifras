@@ -14,7 +14,7 @@ type Props = {
     submit: (close: () => void) => void;
 };
 
-export default function ModalFormDetails({
+export default function FormDetailsModal({
     title,
     children,
     labelBtn,

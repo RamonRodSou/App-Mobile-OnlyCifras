@@ -41,8 +41,13 @@ export default function RootLayout() {
                 <PaperProvider theme={theme}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={getDynamicTabOptions} />
+
                         <Stack.Screen name="chord/[id]" options={{ title: 'Cifra' }} />
+
+                        <Stack.Screen name="editChord/[id]" options={{ title: 'Editar Cifra' }} />
+
                         <Stack.Screen name="favoriteList/[id]" options={{ title: 'Play' }} />
+
                         <Stack.Screen name="chordFavorites/[id]" options={{ title: 'Cifra' }} />
                     </Stack>
                     <StatusBar style="auto" />

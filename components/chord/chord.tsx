@@ -1,6 +1,9 @@
 import { StructSong } from '@/libs/domain/StructSong/StructSong';
-import React, { useMemo } from 'react';
+import { ColorUtils } from '@/libs/utils/ColorUtils';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useMemo } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import CustomButton from '../customButton/customButton';
 import Loading from '../loading/loadgin';
 
 type Props = {
@@ -8,6 +11,19 @@ type Props = {
 }
 
 export default function ChordData({ chord }: Props) {
+
+    const router = useRouter()
+
+    const editChord = useCallback(async (chordId: string) => {
+
+        router.push({
+            pathname: "/editChord/[id]",
+            params: {
+                id: chordId,
+                chord: JSON.stringify(chord)
+            }
+        });
+    }, [router])
 
     const processedStruct = useMemo(() => {
         if (!chord?.struct) return [];
@@ -27,9 +43,13 @@ export default function ChordData({ chord }: Props) {
 
             {chord && (
                 <View>
-                    <Text className='text-[2rem] text-title font-bold text-center flex-1'>
-                        {chord.title}
-                    </Text>
+                    <View className="flex-row justify-between items-center">
+                        <Text className='text-[2rem] text-title font-bold text-center flex-1'>
+                            {chord.title}
+                        </Text>
+                        <CustomButton handle={() => editChord(chord.id)} color={ColorUtils.DEFAULT} icon='note-edit' />
+                    </View>
+
                     <View className='p-4'>
                         <View className='flex mb-4'>
                             <View className='flex-row justify-between'>

@@ -1,6 +1,7 @@
-import DeleteButton from "@/components/deleteButton/deleteButton";
+import CustomButton from "@/components/customButton/customButton";
 import { PlayList } from "@/libs/domain/PlayList/PlayList";
 import { StructSong } from "@/libs/domain/StructSong/StructSong";
+import { ColorUtils } from "@/libs/utils/ColorUtils";
 import { deletePlayList, deleteSongsFromPlayList, findByPlayListId } from "@/service/PlayListService";
 import { findAllSongsByIds } from "@/service/SongsService";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -9,6 +10,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from "react-native-paper";
 
 export default function FavoriteList() {
+    const { id } = useLocalSearchParams<{ id: string }>();
 
     const [data, setData] = useState<PlayList | null>();
     const [songs, setSongs] = useState<StructSong[]>([]);
@@ -16,7 +18,6 @@ export default function FavoriteList() {
     const [selected, setSelected] = useState<string[]>([]);
 
     const router = useRouter();
-    const { id } = useLocalSearchParams<{ id: string }>();
 
     function toggleSelectSong(songId: string) {
         if (selected.includes(songId)) {
@@ -79,14 +80,14 @@ export default function FavoriteList() {
                         </Text>
 
                         {songs.length > 0 && !isChecked && (
-                            <DeleteButton handle={() => setIschecked(true)} />
+                            <CustomButton handle={() => setIschecked(true)} />
                         )}
                         {songs.length > 0 && isChecked && selected.length > 0 && (
-                            <DeleteButton handle={deleteSelected} color="#f30e0e96" />
+                            <CustomButton handle={deleteSelected} color={ColorUtils.SELECTED} />
                         )}
 
                         {songs.length > 0 && isChecked && selected.length == 0 && (
-                            <DeleteButton handle={() => setIschecked(false)} color="#dad6d696" />
+                            <CustomButton handle={() => setIschecked(false)} color={ColorUtils.DEFAULT} />
                         )}
                     </View>
                 )}
