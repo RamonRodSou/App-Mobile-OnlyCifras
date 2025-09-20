@@ -9,6 +9,6 @@ export enum Tones {
     G_Em = "G / Em",
     Gx_Fm = "G# / Fm",
     A_Fxm = "A / F#m",
-    Bb_Gm = "Bb / Gm",
+    Bb_Gm = "A# / Gm",
     B_Gxm = "B / G#m",
 }

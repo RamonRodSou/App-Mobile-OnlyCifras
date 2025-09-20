@@ -5,7 +5,8 @@ import { deleteSongFromPlayList } from "@/service/PlayListService";
 import { findAllSongsByIds } from "@/service/SongsService";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, View } from "react-native";
+import { Dimensions, FlatList } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("window");
 
@@ -60,9 +61,9 @@ export default function ChordFavorites() {
                 index,
             })}
             renderItem={({ item }) => (
-                <View style={{ width, height }}>
+                <ScrollView style={{ width, flex: 1 }}>
                     <ChordData chord={item} />
-                </View>
+                </ScrollView>
             )}
         />
     );
