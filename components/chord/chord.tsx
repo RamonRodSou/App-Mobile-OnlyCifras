@@ -126,7 +126,7 @@ export default function ChordData({ chord }: Props) {
                                         <TouchableOpacity
                                             key={tone}
                                             onPress={() => {
-                                                setSelectedTone(tone); // guarda o par completo
+                                                setSelectedTone(tone);
                                                 setModalVisible(false);
                                             }}
                                             className={`m-2 w-20 h-20 rounded-full items-center justify-center ${isSelected ? 'bg-tone' : 'bg-gray-200'
