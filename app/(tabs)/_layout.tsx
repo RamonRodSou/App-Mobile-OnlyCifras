@@ -2,45 +2,42 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const size = 28;
+    const size = 28;
 
-  return (
-    <Tabs
-      initialRouteName="index"
-      screenOptions={{
-        tabBarActiveTintColor: '#20f535',
-        tabBarInactiveTintColor: '#dcd7d7ff',
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="newChord"
-        options={{
-          title: 'Cadastro',
-          tabBarIcon: ({ color }) => <Ionicons size={size} name="add-circle-outline" color={color} />,
-        }}
-      />
+    return (
+        <Tabs
+            screenOptions={{
+                tabBarActiveTintColor: '#20f535',
+                tabBarInactiveTintColor: '#dcd7d7ff',
+                headerShown: false,
+                tabBarButton: HapticTab,
+            }}>
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: 'house',
+                    tabBarIcon: ({ color }) => <Ionicons size={size} name="menu" color={color} />,
+                }}
+            />
 
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Biblioteca',
-          tabBarIcon: ({ color }) => <Ionicons size={size} name="musical-notes" color={color} />,
-        }}
-      />
+            <Tabs.Screen
+                name="songsList"
+                options={{
+                    title: 'Biblioteca',
+                    tabBarIcon: ({ color }) => <Ionicons size={size} name="musical-notes" color={color} />,
+                }}
+            />
 
-      <Tabs.Screen
-        name="playListTeam"
-        options={{
-          title: 'Playlist',
-          tabBarIcon: ({ color }) => <Ionicons size={size} name="list" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+            <Tabs.Screen
+                name="playListTeam"
+                options={{
+                    title: 'Playlist',
+                    tabBarIcon: ({ color }) => <Ionicons size={size} name="list" color={color} />,
+                }}
+            />
+        </Tabs>
+    );
 }

@@ -1,6 +1,6 @@
-import ChordData from "@/components/chord/chord";
+import ChordData from "@/components/chordData/chordData";
 import { useDataStore } from "@/hooks/useData";
-import { findBySongsId } from "@/service/SongsService";
+import { findByChordId } from "@/service/ChordService";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 
@@ -12,7 +12,7 @@ export default function Chord() {
     async function loadChord() {
         if (!id) return;
         store.setChord(null);
-        const chord = await findBySongsId(id);
+        const chord = await findByChordId(id);
         store.setChord(chord);
     }
 

@@ -11,6 +11,8 @@ module.exports = {
         primary: "#000000",
         secondary: "#ffffff",
         title: "#ffffff",
+        bg: "#5693dcff",
+        subTitle: "#60a5fa",
         name: "#ffff00",
         notes: "#20f535",
         tone: "#ebb811",

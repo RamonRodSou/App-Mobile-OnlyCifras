@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
+import { StructSong } from "../domain/Chord/Chord";
 import { IErrors } from "../domain/Interfaces/IError";
 import { PlayList } from "../domain/PlayList/PlayList";
-import { StructSong } from "../domain/StructSong/StructSong";
 import { StringUtils } from "./StringUtils";
 
 const phoneDigitsRegex = /^[0-9]{8,11}$/;

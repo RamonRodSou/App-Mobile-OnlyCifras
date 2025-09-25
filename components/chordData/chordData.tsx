@@ -1,4 +1,4 @@
-import { StructSong } from '@/libs/domain/StructSong/StructSong';
+import { Chord } from '@/libs/domain/Chord/Chord';
 import { Tones } from '@/libs/enuns/Tones';
 import { semitoneDiff, transposeChord } from '@/libs/utils/ChordUtils';
 import { ColorUtils } from '@/libs/utils/ColorUtils';
@@ -10,7 +10,7 @@ import CustomButton from '../customButton/customButton';
 import Loading from '../loading/loadgin';
 
 type Props = {
-    chord: StructSong | null,
+    chord: Chord | null,
 }
 
 export default function ChordData({ chord }: Props) {
@@ -46,10 +46,6 @@ export default function ChordData({ chord }: Props) {
             }))
         }));
     }, [chord, diff]);
-
-    function normalizeTone(tone: string) {
-        return tone.replace(/\s/g, '').toUpperCase();
-    }
 
     useEffect(() => {
         if (chord?.tone) {

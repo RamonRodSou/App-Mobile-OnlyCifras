@@ -1,3 +1,6 @@
+import ConfirmationModal from "@/components/confirmationModal/confirmationModal";
+import CustomButton from "@/components/customButton/customButton";
+import SelectModal from "@/components/selectModal/selectModal";
 import { useDataStore } from "@/hooks/useData";
 import { Chord } from "@/libs/domain/Chord/Chord";
 import { IErrors } from "@/libs/domain/Interfaces/IError";
@@ -11,9 +14,6 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
-import ConfirmationModal from "../confirmationModal/confirmationModal";
-import CustomButton from "../customButton/customButton";
-import SelectModal from "../selectModal/selectModal";
 
 type Props = {
     id?: string | null
@@ -108,7 +108,7 @@ export default function ChordDetails({ id }: Props) {
 
         await saveEntity(formattedForm);
 
-        router.push('/(tabs)');
+        router.push('/songsList');
     }
 
     async function loadSong() {
@@ -125,7 +125,7 @@ export default function ChordDetails({ id }: Props) {
 
         store.setStructChors(store.structChords.filter(s => s.id !== id));
 
-        router.push('/(tabs)');
+        router.push('/songsList');
     }
 
     useEffect(() => {

@@ -1,11 +1,11 @@
 import { useDataStore } from '@/hooks/useData';
+import { Chord } from '@/libs/domain/Chord/Chord';
 import { PlayList } from '@/libs/domain/PlayList/PlayList';
-import { StructSong } from '@/libs/domain/StructSong/StructSong';
 import { ColorUtils } from '@/libs/utils/ColorUtils';
 import { activeFilter, filterAndPaginate } from '@/libs/utils/filterEntities';
 import { StringUtils } from '@/libs/utils/StringUtils';
-import { findAllPlayList, updatePlayList } from '@/service/PlayListService';
-import { findAllSongs } from '@/service/SongsService';
+import { findAllChords } from '@/service/ChordService';
+import { findUserPlaylists, updatePlayList } from '@/service/PlayListService';
 import { Link } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
@@ -29,15 +29,15 @@ export default function SongsList() {
         : [];
 
     const processedSongs = useMemo(() => {
-        if (!store.structSong) return [];
+        if (!store.structChords) return [];
 
-        return store.structSong.map((it) => {
-            const song = StructSong.fromJson(it);
+        return store.structChords.map((it) => {
+            const song = Chord.fromJson(it);
             song.title = song.title.toUpperCase();
             song.singer = song.singer.trim();
             return song;
         });
-    }, [store.structSong]);
+    }, [store.structChords]);
 
     const displayedSongs = useMemo(() => {
         if (!searchTerm) return processedSongs;
@@ -62,24 +62,24 @@ export default function SongsList() {
                 updatedSongs.splice(index, 1);
             }
 
-            await updatePlayList(list.id, { songId: updatedSongs });
+            await updatePlayList(list, { songId: updatedSongs });
         }
 
         setSelectedSong(StringUtils.EMPTY);
         setModalVisible(false);
     }, [playList]);
 
-    const openModalPlayList = useCallback(async (data: StructSong) => {
+    const openModalPlayList = useCallback(async (data: Chord) => {
         setSelectedSong(data.id);
-        const list = await findAllPlayList();
+        const list = await findUserPlaylists();
         setPlayList(list);
         setModalVisible(true);
     }, [])
 
     async function loadData() {
         setLoading(true);
-        const songs = await findAllSongs();
-        store.setStructSong(songs);
+        const songs = await findAllChords();
+        store.setStructChors(songs);
         setLoading(false);
     }
 

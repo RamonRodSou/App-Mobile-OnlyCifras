@@ -1,35 +1,45 @@
-
+import { Crud } from "@/libs/domain/GenericCrud/GenericCrud";
 import { User } from "@/libs/domain/users/member/User";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { collection, doc, documentId, getDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
-export async function createUser(entity: User, passwordHash: string) {
+const collectionName = 'users';
+
+export async function createUser(entity: User) {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, entity.email, passwordHash);
+
+        const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            entity.email,
+            entity.getPassword()
+        );
+
         const createdUser = userCredential.user;
+        if (!createdUser) throw new Error("Erro ao criar usuário.");
 
-        if (!createdUser) throw new Error("Usuário não autenticado.");
+        await sendEmailVerification(createdUser);
 
-        await setDoc(doc(db, 'users', createdUser.uid), {
-            name: entity.name,
-            birthdate: entity.birthdate,
-            cpf: entity.cpf,
-            email: entity.email,
-            phone: entity.phone,
-            isActive: entity.isActive,
-            createdAt: new Date()
-        });
+        const passwordHash = await entity.getPasswordHash();
 
+        const saveData = await saveUserToDatabase(entity, createdUser.uid, passwordHash);
+        await Crud.add(collectionName, saveData);
+
+        return createdUser;
     } catch (error) {
-        alert('Erro ao registrar um novo adminstrador: ' + error);
+        alert("Erro ao adicionar usuário: " + error);
         throw error;
     }
 }
 
-export async function findUserToById(id: string): Promise<User | null> {
+
+export function findAllUsers(): Promise<User[]> {
+    return Crud.findAllSummary<User>(collectionName)
+}
+
+export async function findUserById(id: string): Promise<User | null> {
     try {
-        const ref = doc(db, 'users', id);
+        const ref = doc(db, collectionName, id);
         const snapshot = await getDoc(ref);
 
         if (!snapshot.exists()) return null;
@@ -41,30 +51,56 @@ export async function findUserToById(id: string): Promise<User | null> {
     }
 }
 
-export async function findAllUsers(): Promise<User[]> {
-    try {
-        const user = auth.currentUser;
-        if (!user) throw new Error("Usuário não autenticado.");
+export async function findAllUsersByIds(ids: string[]): Promise<User[]> {
 
-        const snapshot = await getDocs(collection(db, 'users'));
-        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as User));
+    try {
+        if (!ids || ids.length === 0) return [];
+
+        const chunks = [];
+        for (let i = 0; i < ids.length; i += 10) {
+            chunks.push(ids.slice(i, i + 10));
+        }
+
+        const results: User[] = [];
+
+        for (const chunk of chunks) {
+            const q = query(
+                collection(db, collectionName),
+                where(documentId(), "in", chunk)
+            );
+            const snapshot = await getDocs(q);
+            snapshot.forEach((doc) => {
+                results.push({ id: doc.id, ...doc.data() } as User);
+            });
+        }
+
+        return results;
     } catch (error) {
-        alert('Erro ao listar usuário: ' + error);
+        alert("Erro ao listar cifras: " + error);
         throw error;
     }
 }
 
-// export async function invited(user: User, url: string) {
-//     const token = uuidv4();
+async function saveUserToDatabase(entity: User, id: string, passwordHash: string) {
+    const data = {
+        id,
+        name: entity.name,
+        email: entity.email,
+        phone: entity.phone,
+        birthdate: entity.birthdate ? entity.birthdate.toJSON() : null,
+        groupId: entity.groupId,
+        isActive: entity.isActive,
+        createdAt: entity.createdAt,
+        passwordHash,
+    };
 
-//     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+    return await data;
+}
 
-//     await setDoc(doc(db, 'invites', token), {
-//         email: user.email,
-//         permission: user.permission,
-//         createdAt: new Date(),
-//         expiresAt: expiresAt
-//     });
 
-//     return `${url}/gestor/new-user?token=${token}`;
-// }
+export async function emailExists(email: string) {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+}

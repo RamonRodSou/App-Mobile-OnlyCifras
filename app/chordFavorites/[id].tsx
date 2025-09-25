@@ -1,8 +1,7 @@
-import ChordData from "@/components/chord/chord";
+import ChordData from "@/components/chordData/chordData";
 import Loading from "@/components/loading/loadgin";
-import { StructSong } from "@/libs/domain/StructSong/StructSong";
-import { deleteSongFromPlayList } from "@/service/PlayListService";
-import { findAllSongsByIds } from "@/service/SongsService";
+import { Chord } from "@/libs/domain/Chord/Chord";
+import { findAllChordsByIds } from "@/service/ChordService";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList } from "react-native";
@@ -14,20 +13,15 @@ export default function ChordFavorites() {
     const { songs, playlistId, id } = useLocalSearchParams<{ songs?: string; playlistId?: string; id?: string }>();
     const songIds: string[] = songs ? JSON.parse(songs) : [];
 
-    const [chords, setChords] = useState<StructSong[]>([]);
+    const [chords, setChords] = useState<Chord[]>([]);
     const [initialIndex, setInitialIndex] = useState(0);
 
     const flatListRef = useRef<FlatList>(null);
 
-    async function removeSong(songId: string) {
-        deleteSongFromPlayList(String(playlistId), songId);
-        setChords((prev) => prev.filter((song) => song.id !== songId));
-    }
-
     useEffect(() => {
         async function loadAllChords() {
             if (!songIds.length) return;
-            const allChords = await findAllSongsByIds(songIds);
+            const allChords = await findAllChordsByIds(songIds);
             setChords(allChords);
 
             if (id) {

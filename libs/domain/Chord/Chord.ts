@@ -3,12 +3,11 @@ import { StringUtils } from "@/libs/utils/StringUtils";
 import { v4 as uuidv4 } from 'uuid';
 import { IStruct } from "../Interfaces/IStruct";
 
-export class StructSong {
+export class Chord {
 
     constructor(
         public readonly id: string = uuidv4(),
         public title: string = StringUtils.EMPTY,
-        public description: string = StringUtils.EMPTY,
         public singer: string = StringUtils.EMPTY,
         public tone: Tones = Tones.C_Am,
         public userId: string = StringUtils.EMPTY,
@@ -17,11 +16,10 @@ export class StructSong {
         public createdAt: string = new Date().toISOString(),
     ) { }
 
-    static fromJson(json: any): StructSong {
-        return new StructSong(
+    static fromJson(json: any): Chord {
+        return new Chord(
             json.id,
             json.title,
-            json.description,
             json.singer,
             json.tone,
             json.userId,
@@ -35,7 +33,6 @@ export class StructSong {
         return {
             id: this.id,
             title: this.title,
-            description: this.description,
             singer: this.singer,
             tone: this.tone,
             userId: this.userId,
