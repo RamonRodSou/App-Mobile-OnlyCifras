@@ -111,10 +111,10 @@ export default function ChordData({ chord }: Props) {
                         <View className='p-4'>
                             <View className='flex-1 flex-row justify-between items-start mb-4'>
                                 <View className="flex-col items-start">
-                                    <Text className='text-name text-[1.5rem]'>{chord.singer}</Text>
+                                    <Text className='text-name text-[1.5rem] mt-3'>{chord.singer}</Text>
 
                                     <TouchableOpacity onPress={() => setModalVisible(true)}>
-                                        <Text className='text-[1.5rem] font-semibold text-tone'>{selectedTone}</Text>
+                                        <Text className='text-[1.5rem] font-semibold text-tone mt-[-3]'>{selectedTone}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View className="flex-col items-center">
