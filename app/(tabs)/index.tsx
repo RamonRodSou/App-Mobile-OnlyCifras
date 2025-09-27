@@ -87,7 +87,14 @@ export default function DashboardScreen() {
                     title="Tutorial"
                     subtitle="Aprenda a Escrever Cifras"
                     icon="book-outline"
-                    onPress={() => { }}
+                    onPress={() => router.push("./(menu)/tutorialScreen")}
+                />
+
+                <DashboardButton
+                    title="Perfil"
+                    subtitle="Entrar no Perfil"
+                    icon="man"
+                    onPress={() => router.push("./(menu)/userProfileScreen")}
                 />
 
                 <DashboardButton

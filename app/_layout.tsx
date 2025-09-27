@@ -66,8 +66,10 @@ export default function RootLayout() {
                                     <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
                                     <Stack.Screen name="(auth)/forgotPassWord" options={{ headerShown: false }} />
 
-                                    <Stack.Screen name="(menu)/chordDetails" options={{ headerShown: false }} />
-                                    <Stack.Screen name="(menu)/groupScreen" options={{ headerShown: false }} />
+                                    <Stack.Screen name="(menu)/chordDetails" options={{ title: 'Cadastrar Cifra' }} />
+                                    <Stack.Screen name="(menu)/groupScreen" options={{ title: 'Grupo' }} />
+                                    <Stack.Screen name="(menu)/tutorialScreen" options={{ title: 'Tutorial' }} />
+                                    <Stack.Screen name="(menu)/userProfileScreen" options={{ title: 'Perfil' }} />
 
                                     <Stack.Screen name="(tabs)" options={getDynamicTabOptions} />
                                     <Stack.Screen name="chord/[id]" options={{ title: 'Cifra' }} />

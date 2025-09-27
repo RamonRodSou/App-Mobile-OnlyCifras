@@ -11,8 +11,7 @@ import { Group } from '@/libs/domain/Group/Group';
 import { User } from '@/libs/domain/users/member/User';
 import { ColorUtils } from "@/libs/utils/ColorUtils";
 import { StringUtils } from "@/libs/utils/StringUtils";
-import { createGroupOnClient } from "@/service/createGroupOnClient";
-import { findMyGroupWithMembers, joinGroupWithCode } from "@/service/GroupService";
+import { createGroupOnClient, findMyGroupWithMembers, joinGroupWithCode } from "@/service/GroupService";
 
 export default function GroupScreen() {
     const [group, setGroup] = useState<Group | null>(null);

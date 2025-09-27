@@ -80,6 +80,16 @@ export async function findAllUsersByIds(ids: string[]): Promise<User[]> {
     }
 }
 
+export async function updateUser(id: string, data: Partial<User>): Promise<void> {
+    try {
+        const ref = doc(db, collectionName, id);
+        await updateDoc(ref, data);
+    } catch (error) {
+        alert('Erro ao atualizar usuário: ' + error);
+        throw error;
+    }
+}
+
 export async function updateUserLikes(userId: string, incrementValue: number) {
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
@@ -101,7 +111,7 @@ async function saveUserToDatabase(entity: User, id: string, passwordHash: string
         email: entity.email,
         phone: entity.phone,
         birthdate: entity.birthdate ? entity.birthdate.toJSON() : null,
-        groupId: entity.groupId,
+        memberOfGroups: entity.memberOfGroups,
         isActive: entity.isActive,
         createdAt: entity.createdAt,
         passwordHash,

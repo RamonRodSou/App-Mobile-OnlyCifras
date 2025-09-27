@@ -229,10 +229,10 @@ export const registerUser = onCall({ cors: true }, async (request) => {
             email: data.email,
             phone: data.phone,
             cpf: data.cpf,
-            birthdate: new Date(data.birthdate),
+            birthdate: new Date(data.birthdate).toISOString(),
             isActive: true,
             activePlan: "LV5A8yuxdpqJJnSvHygx",
-            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            createdAt: new Date().toISOString()
         };
 
         await db.collection("users").doc(userRecord.uid).set(newUserProfile);

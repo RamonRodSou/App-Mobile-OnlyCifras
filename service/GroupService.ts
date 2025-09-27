@@ -55,6 +55,21 @@ export async function findMyGroups(): Promise<Group[]> {
     }
 }
 
+export async function findGroupsById(id: string): Promise<Group | null> {
+    try {
+        const ref = doc(db, "groups", id);
+        const snapshot = await getDoc(ref);
+
+        if (!snapshot.exists()) return null;
+
+        return { id: snapshot.id, ...snapshot.data() } as Group;
+    } catch (error) {
+        alert('Erro ao buscar grupo: ' + error);
+        throw error;
+    }
+}
+
+
 export async function findGroupsByIds(ids: string[]): Promise<Group[]> {
     if (!ids || ids.length === 0) return [];
 

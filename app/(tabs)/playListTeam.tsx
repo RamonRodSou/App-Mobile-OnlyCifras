@@ -101,15 +101,15 @@ export default function PlayListTeam() {
     return (
         <ScrollView className="flex-1 bg-background p-6">
             <View className="flex-row justify-between mb-1 space-x-2">
-                <TouchableOpacity onPress={() => { setModalType(PlaylistType.PERSONAL); setModalVisible(true); }} className="bg-bg p-2 p-6 w-[45%] rounded-lg flex-row items-center">
+                <TouchableOpacity onPress={() => { setModalType(PlaylistType.PERSONAL); setModalVisible(true); }} className="bg-bg p-4 w-[45%] rounded-lg flex-row items-center">
                     <Ionicons name="add" size={18} color="white" />
-                    <Text className="text-white font-bold ml-1">Nova Pessoal</Text>
+                    <Text className="text-white text-[.8rem] font-bold ml-1">Nova Pessoal</Text>
                 </TouchableOpacity>
 
                 {isUserAdmin && (
-                    <TouchableOpacity onPress={() => { setModalType(PlaylistType.GROUP); setModalVisible(true); }} className="bg-tone p-6  w-[45%] rounded-lg flex-row items-center">
+                    <TouchableOpacity onPress={() => { setModalType(PlaylistType.GROUP); setModalVisible(true); }} className="bg-tone p-4 w-[45%] rounded-lg flex-row items-center">
                         <Ionicons name="people" size={18} color="white" />
-                        <Text className="text-white font-bold ml-1">Nova do Grupo</Text>
+                        <Text className="text-white text-[.8rem] font-bold ml-1">Nova do Grupo</Text>
                     </TouchableOpacity>
                 )}
             </View>

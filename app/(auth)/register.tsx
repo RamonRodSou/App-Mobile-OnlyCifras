@@ -1,6 +1,6 @@
 import { formatDateBR } from "@/libs/utils/formatDateBr";
 import { StringUtils } from "@/libs/utils/StringUtils";
-import { registerService, UserRegistrationData } from "@/service/registerService";
+import { registerService, UserRegistrationData } from "@/service/RegisterService";
 import { emailExists } from "@/service/UserService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";

@@ -19,7 +19,7 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: 'House',
-                    tabBarIcon: ({ color }) => <Ionicons size={size} name="menu" color={color} />,
+                    tabBarIcon: ({ color }) => <Ionicons size={size} name="home" color={color} />,
                 }}
             />
 
