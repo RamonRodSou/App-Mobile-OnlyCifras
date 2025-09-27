@@ -3,6 +3,11 @@ import { StringUtils } from "@/libs/utils/StringUtils";
 import { v4 as uuidv4 } from 'uuid';
 import { IStruct } from "../Interfaces/IStruct";
 
+interface ILike {
+    likes: number;
+    userId: string;
+}
+
 export class Chord {
 
     constructor(
@@ -12,6 +17,7 @@ export class Chord {
         public tone: Tones = Tones.C_Am,
         public userId: string = StringUtils.EMPTY,
         public struct: IStruct[] = [],
+        public likesCount: number = 0,
         public isActive: boolean = true,
         public createdAt: string = new Date().toISOString(),
     ) { }
@@ -24,6 +30,7 @@ export class Chord {
             json.tone,
             json.userId,
             json.struct,
+            json.likesCount,
             json.isActive,
             json.createdAt
         );
@@ -37,6 +44,7 @@ export class Chord {
             tone: this.tone,
             userId: this.userId,
             struct: this.struct,
+            likesCount: this.likesCount,
             isActive: this.isActive,
             createdAt: this.createdAt,
         };

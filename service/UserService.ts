@@ -1,7 +1,7 @@
 import { Crud } from "@/libs/domain/GenericCrud/GenericCrud";
 import { User } from "@/libs/domain/users/member/User";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { collection, doc, documentId, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, documentId, getDoc, getDocs, increment, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 const collectionName = 'users';
@@ -31,7 +31,6 @@ export async function createUser(entity: User) {
         throw error;
     }
 }
-
 
 export function findAllUsers(): Promise<User[]> {
     return Crud.findAllSummary<User>(collectionName)
@@ -81,6 +80,20 @@ export async function findAllUsersByIds(ids: string[]): Promise<User[]> {
     }
 }
 
+export async function updateUserLikes(userId: string, incrementValue: number) {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+        receivedLikes: increment(incrementValue)
+    });
+}
+
+export async function emailExists(email: string) {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+}
+
 async function saveUserToDatabase(entity: User, id: string, passwordHash: string) {
     const data = {
         id,
@@ -95,12 +108,4 @@ async function saveUserToDatabase(entity: User, id: string, passwordHash: string
     };
 
     return await data;
-}
-
-
-export async function emailExists(email: string) {
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, where("email", "==", email));
-    const snapshot = await getDocs(q);
-    return !snapshot.empty;
 }

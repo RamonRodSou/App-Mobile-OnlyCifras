@@ -108,7 +108,7 @@ export default function ChordDetails({ id }: Props) {
 
         await saveEntity(formattedForm);
 
-        router.push('/(tabs)');
+        router.push('/songsList');
     }
 
     async function loadSong() {

@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { TextInput } from "react-native-paper";
 
 type Props = {
@@ -140,7 +141,7 @@ export default function ChordDetails({ id }: Props) {
     }, [id]);
 
     return (
-        <View className="p-4 gap-2 bg-primary">
+        <ScrollView className="p-4 gap-2 bg-primary">
             <View className="flex-row justify-between items-center">
                 <Text className="text-[2rem] text-title mb-3">
                     {title}
@@ -232,6 +233,6 @@ export default function ChordDetails({ id }: Props) {
                     Salvar
                 </Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 }

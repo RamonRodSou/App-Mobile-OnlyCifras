@@ -3,6 +3,7 @@ import { Chord } from '@/libs/domain/Chord/Chord';
 import { PlayList } from '@/libs/domain/PlayList/PlayList';
 import { ColorUtils } from '@/libs/utils/ColorUtils';
 import { activeFilter, filterAndPaginate } from '@/libs/utils/filterEntities';
+import { formatTextIgnoreAccents } from '@/libs/utils/formatedText';
 import { StringUtils } from '@/libs/utils/StringUtils';
 import { findAllChords } from '@/service/ChordService';
 import { findUserPlaylists, updatePlayList } from '@/service/PlayListService';
@@ -41,9 +42,12 @@ export default function SongsList() {
 
     const displayedSongs = useMemo(() => {
         if (!searchTerm) return processedSongs;
+
+        const normalizedTerm = formatTextIgnoreAccents(searchTerm.toLowerCase());
+
         return processedSongs.filter(song =>
-            song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            song.singer.toLowerCase().includes(searchTerm.toLowerCase())
+            formatTextIgnoreAccents(song.title.toLowerCase()).includes(normalizedTerm) ||
+            formatTextIgnoreAccents(song.singer.toLowerCase()).includes(normalizedTerm)
         );
     }, [processedSongs, searchTerm]);
 
@@ -105,8 +109,8 @@ export default function SongsList() {
                 />
             </View>
             {entities?.map((it, index) => (
-                <TouchableOpacity key={index} className='p-2 mb-2 rounded-md flex-row justify-between items-center'>
-                    <Link href={`/chord/${it.id}`}>
+                <TouchableOpacity key={index} className=' p-2 mb-2 rounded-md flex-row justify-between items-center'>
+                    <Link className='flex-1' href={`/chord/${it.id}`}>
                         <View>
                             <Text className='text-title text-xl' >{it.title}</Text>
                             <Text className='text-yellow-400 text-base'>{it.singer}</Text>

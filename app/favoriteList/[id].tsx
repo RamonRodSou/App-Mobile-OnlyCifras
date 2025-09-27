@@ -139,7 +139,7 @@ export default function FavoriteList() {
                             {`Playlist vazia.\nCadastrar músicas`}
                         </Text>
                         {canEdit ? (
-                            <TouchableOpacity onPress={() => router.push('/(tabs)')}>
+                            <TouchableOpacity onPress={() => router.push('/songsList')}>
                                 <Text className="text-subTitle font-bold text-[1.5rem]">Biblioteca</Text>
                             </TouchableOpacity>
                         ) : (

@@ -64,6 +64,7 @@ export default function RootLayout() {
                                 <Stack>
                                     <Stack.Screen name="(auth)/index" options={{ headerShown: false }} />
                                     <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
+                                    <Stack.Screen name="(auth)/forgotPassWord" options={{ headerShown: false }} />
 
                                     <Stack.Screen name="(menu)/chordDetails" options={{ headerShown: false }} />
                                     <Stack.Screen name="(menu)/groupScreen" options={{ headerShown: false }} />

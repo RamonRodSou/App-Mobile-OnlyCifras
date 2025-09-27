@@ -77,6 +77,11 @@ export default function Login() {
                     <Text className="text-tone font-bold">Cadastre-se</Text>
                 </View>
             </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => router.push("/forgotPassWord")}
+                className="mt-10 items-center text-gray-500">
+                <Text className="text-default font-bold">Esqueci a senha</Text>
+            </TouchableOpacity>
         </View>
     );
 }

@@ -13,6 +13,7 @@ export class User {
 		public phone: string = StringUtils.EMPTY,
 		public groupId: string = StringUtils.EMPTY,
 		public activePlan: string = StringUtils.EMPTY,
+		public receivedLikes: number = 0,
 		public isActive: boolean = true,
 		public createdAt: string = new Date().toISOString(),
 		protected password: string = StringUtils.EMPTY,
@@ -29,6 +30,7 @@ export class User {
 			json.role,
 			json.groupId,
 			json.activePlan,
+			json.receivedLikes,
 			json.isActive,
 		);
 	}
@@ -43,6 +45,7 @@ export class User {
 			phone: this.phone,
 			groupId: this.groupId,
 			activePlan: this.activePlan,
+			receivedLikes: this.receivedLikes,
 			isActive: this.isActive,
 			createdAt: this.createdAt,
 		};

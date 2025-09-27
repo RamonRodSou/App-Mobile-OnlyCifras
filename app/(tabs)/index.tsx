@@ -52,7 +52,7 @@ export default function DashboardScreen() {
             <View className="flex-row justify-between">
                 <View className="mb-10">
                     <Text className="text-3xl font-bold text-title">
-                        Olá, {user?.displayName || "Músico"}!
+                        Olá, {user?.displayName?.split(' ').at(0) || "Músico"}!
                     </Text>
                     <Text className="text-lg text-gray-400">O que vamos fazer hoje?</Text>
                 </View>
